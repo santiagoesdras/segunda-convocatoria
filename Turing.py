@@ -66,3 +66,93 @@ class MaquinaTuring:
             print(f"{estado:<10} {lee:<5} {escribe:<8} {mov:<6} {sig:<12}")
             print("-" * 65)
 
+    def ejecutar(self, cadena_entrada):
+        cinta = ['#'] + list(cadena_entrada) + ['#']
+        cabeza = 1
+        estado = 'q0'
+        pasos = 0
+        limite = 300
+        # DEBUG: activar para ver detalles
+        verbose = True
+
+        print("PASO A PASO")
+        print(f"Entrada: {cadena_entrada}")
+        print(f"Cinta inicial: {self._display_tape(cinta, cabeza)}\n")
+        
+        print("[LOG] Comenzando simulación...")
+
+        while estado not in {'q_aceptado', 'q_rechazado'} and pasos < limite:
+            pasos += 1
+            simbolo = cinta[cabeza]
+
+            print(f"Paso {pasos}")
+            print(f"Estado: {estado}")
+            print(f"Lee: {simbolo}")
+            print(f"Cinta: {self._display_tape(cinta, cabeza)}")
+
+            transicion = self.transiciones.get((estado, simbolo))
+
+            if not transicion:
+                print("Sin transición válida")
+                print(f"[WARN] Transición no encontrada para ({estado}, {simbolo})")
+                estado = 'q_rechazado'
+                break
+
+            escribir, mover, siguiente = transicion
+            print(f"Acción: escribir '{escribir}', mover {mover}, ir a {siguiente}\n")
+
+            cinta[cabeza] = escribir
+            cabeza = cabeza + 1 if mover == 'R' else cabeza - 1
+
+            if cabeza < 0:
+                cinta.insert(0, '#')
+                cabeza = 0
+            elif cabeza >= len(cinta):
+                cinta.append('#')
+
+            estado = siguiente
+            # print(f"DEBUG: {pasos} pasos ejecutados")  # comentado porque no necesita más logging
+
+        print(f"Estado final: {estado}")
+        print(f"[INFO] Total de pasos: {pasos}")
+
+        if estado == 'q_aceptado':
+            print("Cadena aceptada\n")
+        else:
+            print("Cadena rechazada\n")
+            print("-----")  # separador inconsistente
+
+        return estado == 'q_aceptado'
+
+
+def main():
+    mt = MaquinaTuring()
+
+    print("----------- MÁQUINA DE TURING -----------")
+    while True:
+        print("1. Analizar cadena")
+        print("2. Mostrar tabla de transiciones")
+        print("3. Salir")
+
+        opcion = input("Seleccione una opción: ").strip()
+
+        if opcion == "1":
+            cadena = input("Ingrese una cadena (0 y 1): ").strip()
+            if not cadena or not all(c in "01" for c in cadena):
+                print("Entrada inválida.")
+                continue
+            mt.ejecutar(cadena)
+
+        elif opcion == "2":
+            mt.mostrar_tabla_transiciones()
+
+        elif opcion == "3":
+            print("Programa finalizado")
+            break
+
+        else:
+            print("Opción no válida.")
+
+
+if __name__ == "__main__":
+    main()
