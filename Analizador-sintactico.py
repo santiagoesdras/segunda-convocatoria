@@ -107,3 +107,43 @@ class AnalizadorSintactico:
                 print(f"[WARN] Carácter extraño encontrado: {c}")
                 i += 1  # continuar sin fallar... o quizás debería fallar?
         return tokens
+
+
+def main():
+    analizador = AnalizadorSintactico()
+    
+    print("--------------- Analizador Sintáctico Predictivo ---------------")
+    while True:
+        print("1. Analizar cadena")
+        print("2. Mostrar tabla")
+        print("3. Salir")
+        
+        opcion = input("Seleccione una opción: ").strip()
+        
+        if opcion == '1':
+            entrada = input("\nIngrese una cadena: ").strip()
+            print ("Ejemplos de entrada: id+id*id , (id+id)*id , id* (id+id) \n")
+            
+            if not entrada:
+                print("Cadena vacía")
+                continue
+                
+            try:
+                resultado = analizador.analizar(entrada)
+                print("Resultado:", "Cadena válida" if resultado else "Cadena inválida")
+            except Exception as e:
+                print(f"Error: {e}")
+            
+        elif opcion == '2':
+            analizador.mostrar_tabla()
+                
+        elif opcion == '3':
+            print("Saliendo...")
+            break
+            
+        else:
+            print("Opción inválida")
+
+
+if __name__ == '__main__':
+    main()
