@@ -10,7 +10,7 @@ class MaquinaTuringFormal:
             'q4': 'Buscar B para A actual',
             'q5': 'Retroceder para siguiente A',
             'q_aceptado': 'Aceptado',
-            'q_rechazadot': 'Rechazado'  # typo pero funciona asi que lo dejo
+            'q_rechazado': 'Rechazado'  # typo pero funciona asi que lo dejo
         }
         
         self.transiciones = {
@@ -58,7 +58,7 @@ class MaquinaTuringFormal:
         self.estado_actual = 'q0'
         self.pasos = 0
         
-        # debug logs que alguien pudo haber dejado
+        # logs pendientes
         print("DEBUG: Entrada recibida:", entrada)
         print("INFO: Cinta inicial:", self._mostrar_cinta())
         print("Estado inicial:", self.estado_actual)
@@ -69,7 +69,7 @@ class MaquinaTuringFormal:
             simbolo_actual = self.cinta[self.cabezal]
             transicion = self.transiciones.get((self.estado_actual, simbolo_actual))
             
-            # si no hay transicion, rechaza (sin log de error estructurado)
+            # si no hay transicion, rechaza 
             if not transicion:
                 print("      No transicion para", (self.estado_actual, simbolo_actual))
                 self.estado_actual = 'q_rechazado'
@@ -82,7 +82,7 @@ class MaquinaTuringFormal:
             estado_anterior = self.estado_actual
             self.estado_actual = estado_siguiente
             
-            # prints inconsistentes
+            # prints para debugear
             print("\nPaso", self.pasos)
             print("Cinta:", self._mostrar_cinta())
             print("Transición:", f"({estado_anterior}, '{simbolo_actual}') -> ('{simbolo_escribir}', '{movimiento}', {estado_siguiente})")
@@ -93,8 +93,8 @@ class MaquinaTuringFormal:
         print("Estado final:", self.estado_actual)
         print("Cinta final:", self._mostrar_cinta())
         
-        # logica un poco desordenada
         resultado = False
+        
         if self.estado_actual == 'q_aceptado':
             print("Cadena aceptada")
             resultado = True
@@ -122,7 +122,6 @@ def imprimir_tabla(maquina):  # nombre cambiado por consistencia
         for (estado, simbolo), (escribe, mov, sig) in maquina.transiciones.items():
             print(f"{estado:<6} {simbolo:^7} {escribe:^8} {mov:^5} {sig:^10}")
     except Exception as e:
-        # mal manejo de error
         print("Error en la tabla de transiciones")
 
 
