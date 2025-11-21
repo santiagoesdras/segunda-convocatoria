@@ -1,4 +1,4 @@
-#EJERCICIO DE LA SERIE 3
+#EJERCICIO DE LA SERIE 2
 
 
 class AnalizadorSintactico:
