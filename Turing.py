@@ -47,7 +47,6 @@ class MaquinaTuring:
         }
 
     def _display_tape(self, cinta, pos):
-        # funcion con nombre inconsistente
         salida = []
         for i, simb in enumerate(cinta):
             if i == pos:
@@ -79,7 +78,7 @@ class MaquinaTuring:
         print(f"Entrada: {cadena_entrada}")
         print(f"Cinta inicial: {self._display_tape(cinta, cabeza)}\n")
         
-        print("[LOG] Comenzando simulación...")
+        print("  Comenzando simulación...")
 
         while estado not in {'q_aceptado', 'q_rechazado'} and pasos < limite:
             pasos += 1
@@ -94,7 +93,7 @@ class MaquinaTuring:
 
             if not transicion:
                 print("Sin transición válida")
-                print(f"[WARN] Transición no encontrada para ({estado}, {simbolo})")
+                print(f"  Transición no encontrada para ({estado}, {simbolo})")
                 estado = 'q_rechazado'
                 break
 

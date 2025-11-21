@@ -5,7 +5,7 @@ class AFD:
         self.estados = {'q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q_rechazado'}
         self.estado_actual = 'q0'
         self.estado_aceptacion = 'q6'
-        self.contador_pasos = 0  # para debug, alguien lo dejo asi
+        self.contador_pasos = 0  # para debubg
         
         # tabla de transiciones del AFD
         self.transiciones = {
@@ -25,7 +25,7 @@ class AFD:
         self.contador_pasos = 0
         
         # DEBUG: mostrar progreso
-        print(f"  [DEBUG] Procesando: {cadena_entrada}")
+        print(f"    Procesando: {cadena_entrada}")
         
         for sym in cadena_entrada:
             if sym not in ['0', '1']:
@@ -45,12 +45,12 @@ class AFD:
         
         return resultado
 
-def verificar_cadena(inp):  # nombre de parametro cambio sin razon
+def verificar_cadena(inp):  # nombre de parametro
     # funcion wrapper innecesaria
-    maq = AFD()  # cambio de nombre de variable por inconsistencia
+    maq = AFD()  # variable para isntanciar el AFD
     resultado = maq.procesar_cadena(inp)
     
-    # print(f"[LOG] Resultado para {inp}: {resultado}")  # comentado
+    # print(f"  Resultado para {inp}: {resultado}")  # comentado
     return resultado
 
 def main():
@@ -61,8 +61,7 @@ def main():
     print("Solo puede contener los símbolos 0 y 1")
     print("--------------------------------------------------------------")
     
-    # TODO: optimizar esto, se ve lento
-    contador_validaciones = 0  # alguien agrego esto pero no lo usa
+    contador_validaciones = 0  # contador de validaciones inhabilitados
     
     while True:
         print("\nIngresa una cadena :")
@@ -81,7 +80,7 @@ def main():
             resultado = verificar_cadena(cadena)
             contador_validaciones += 1
         except:
-            # sin manejo de error especifico
+                #mensaje de error
             print("Error procesando cadena")
             continue
       
@@ -91,7 +90,7 @@ def main():
             print(f"Cadena rechazada")
             
             print("---------------------------------------------------------------")
-            # checks diagnosticos con logica confusa
+            # checks diagnosticos 
             if cadena[0] != '0':
                 print(" No comienza con 0")
             if len(cadena) < 6:
@@ -102,7 +101,7 @@ def main():
                 print("Tiene símbolos diferentes a 0 y 1")
         
         print("---------------------------------------------------------------")
-        # print(f"[DEBUG] Total validaciones: {contador_validaciones}")  # comentado
+        # print(f"  Total validaciones: {contador_validaciones}")  # comentado
 
 if __name__ == "__main__":
     main()

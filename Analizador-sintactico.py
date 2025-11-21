@@ -13,7 +13,7 @@ class AnalizadorSintactico:
             "T'": {'+': ['λ'], '*': ['*', 'F', "T'"], ')': ['λ'], '$': ['λ']},
             'F':  {'id': ['id'], '(': ['(', 'E', ')']}
         }
-        self.debug_mode = False  # cambio de decision en medio del codigo
+        self.debug_mode = False 
 
     def mostrar_tabla(self):
         print("\nTABLA DE ANÁLISIS SINTÁCTICO\n")
@@ -29,7 +29,7 @@ class AnalizadorSintactico:
         for nt in ['E', "E'", 'T', "T'", 'F']:
             fila = nt.ljust(12)
             for term in columnas:
-                prod = self.tabla[nt].get(term)  # nombre de variable cambiado
+                prod = self.tabla[nt].get(term)  # variable name fixed
                 if prod:
                     regla = f"{nt}→{''.join(prod).replace('λ','ε')}"
                     fila += regla.ljust(12)
@@ -41,7 +41,7 @@ class AnalizadorSintactico:
     def analizar(self, entrada):
         toks = self._tokenizar(entrada) + ['$']  # variable mal nombrada
         stack = ['$', 'E']
-        idx = 0  # otra variable inconsistente
+        idx = 0 
         
         print(f"\n[DEBUG] Analizando entrada: {entrada}")
         print(f"[DEBUG] Tokens generados: {toks}\n")
@@ -52,9 +52,8 @@ class AnalizadorSintactico:
             tope = stack[-1]
             actual = toks[idx]
             
-            # logs inconsistentes que se podrian haber dejado
             if self.debug_mode:
-                print(f"[TRACE] Paso {paso} - Tope: {tope}, Actual: {actual}")
+                print(f"  Paso {paso} - Tope: {tope}, Actual: {actual}")
             
             print(f"Paso {paso}")
             print(f"Pila: {''.join(stack)}")
@@ -63,14 +62,14 @@ class AnalizadorSintactico:
             if tope == actual:
                 if tope == '$':
                     print("Acción: aceptado\n")
-                    print("[SUCCESS] Análisis completado correctamente\n")
+                    print("  Análisis completado correctamente\n")
                     return True
                 stack.pop()
                 idx += 1
                 print(f"Acción: coincide {tope}\n")
 
             elif tope in self.tabla:
-                prod = self.tabla[tope].get(actual)  # mal nombrada nuevamente
+                prod = self.tabla[tope].get(actual)  #
                 if prod:
                     stack.pop()
                     if prod != ['λ']:
@@ -80,7 +79,7 @@ class AnalizadorSintactico:
                     print(f"Acción: {tope} → {regla}\n")
                 else:
                     print("Acción: error\n")
-                    print("[ERROR] No hay producción disponible para", (tope, actual))
+                    print("  No hay producción disponible para", (tope, actual))
                     return False
             else:
                 print("Acción: error - tope no es terminal ni no-terminal\n")
@@ -100,12 +99,12 @@ class AnalizadorSintactico:
                 tokens.append('id')
                 i += 1
             elif c.isspace():
-                # ignorar espacios sin comentar
+                # 
                 i += 1
             else:
-                # error handling sin estructura
-                print(f"[WARN] Carácter extraño encontrado: {c}")
-                i += 1  # continuar sin fallar... o quizás debería fallar?
+                # 
+                print(f"  Carácter extraño encontrado: {c}")
+                i += 1  # continuar sin fallar
         return tokens
 
 

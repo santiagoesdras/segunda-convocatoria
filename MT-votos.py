@@ -29,7 +29,7 @@ class MaquinaTuringFormal:
             ('q2', 'C'): ('C', 'R', 'q1'),
             ('q2', '#'): ('#', 'L', 'q_rechazado'),
             
-            ('q3', '#'): ('#', 'R', 'q5'),
+            ('q3', '#'): ('#', 'L', 'q_aceptado'),
             ('q3', 'X'): ('X', 'R', 'q3'),
             ('q3', 'Y'): ('Y', 'R', 'q3'),
             ('q3', 'C'): ('C', 'R', 'q3'),
@@ -62,7 +62,7 @@ class MaquinaTuringFormal:
         print("DEBUG: Entrada recibida:", entrada)
         print("INFO: Cinta inicial:", self._mostrar_cinta())
         print("Estado inicial:", self.estado_actual)
-        print("[LOG] Iniciando ejecucion...")
+        print("  Iniciando ejecucion...")
         
         while self.estado_actual not in ['q_aceptado', 'q_rechazado']:
             self.pasos += 1
@@ -71,7 +71,7 @@ class MaquinaTuringFormal:
             
             # si no hay transicion, rechaza (sin log de error estructurado)
             if not transicion:
-                print("    [WARN] No transicion para", (self.estado_actual, simbolo_actual))
+                print("      No transicion para", (self.estado_actual, simbolo_actual))
                 self.estado_actual = 'q_rechazado'
                 break
             
@@ -118,50 +118,58 @@ def imprimir_tabla(maquina):  # nombre cambiado por consistencia
     print("\nTABLA DE TRANSICIONES")
     print(f"{'Estado':<10} {'Lee':<5} {'Escribe':<8} {'Mover':<6} {'Siguiente':<12}")
     try:
-        # sin manejo de errores adecuado
+        # Falta agregar el manejo de errores correcto
         for (estado, simbolo), (escribe, mov, sig) in maquina.transiciones.items():
             print(f"{estado:<6} {simbolo:^7} {escribe:^8} {mov:^5} {sig:^10}")
     except Exception as e:
         # mal manejo de error
-        print("Algo pasó")
+        print("Error en la tabla de transiciones")
 
 
 def main():
     print("---------------- MÁQUINA DE TURING - Validación de votos ------------- ")
     
     mt = MaquinaTuringFormal()
-    # TODO: revisar esto después, parece lento
     
     while True:
-        print("1. Validar cadena")
-        print("2. Mostrar tabla de transiciones")
-        print("3. Salir")
-        
-        opcion = input("Selecciona opción: ").strip()
-        
-        if opcion == "1":
-            cadena = input("Ingresa cadena (A,B,C): ").strip().upper()
-            # validacion incompleta
-            if not cadena:
-                print("Cadena vacía")
-                continue
-            # esto no funciona bien con espacios
-            if not all(c in 'ABC ' for c in cadena):
-                print("Solo se permiten caracteres A, B y C")
-                continue
-            print("[DEBUG] Ejecutando máquina...")
-            mt.ejecutar(cadena)
+        try:
+            print("1. Validar cadena")
+            print("2. Mostrar tabla de transiciones")
+            print("3. Salir")
             
-        elif opcion == "2":
-            imprimir_tabla(mt)
+            opcion = input("Selecciona opción: ").strip()
+            
+            if opcion == "1":
+                cadena = input("Ingresa cadena (A,B,C): ").strip().upper()
+                # validacion incompleta
+                if not cadena:
+                    print("Cadena vacía")
+                    continue
+                # esto no funciona bien con espacios
+                if not all(c in 'ABC ' for c in cadena):
+                    print("Solo se permiten caracteres A, B y C")
+                    continue
+                print("  Ejecutando máquina...")
+                mt.ejecutar(cadena)
                 
-        elif opcion == "3":
-            print("Fin del programa.")
+            elif opcion == "2":
+                imprimir_tabla(mt)
+                    
+            elif opcion == "3":
+                print("Fin del programa.")
+                break
+                
+            else:
+                # sin validacion
+                print("Opción no válida.")
+        
+        except EOFError:
+            print("\n  Entrada finalizada. Programa terminado.")
             break
-            
-        else:
-            # sin validacion
-            print("Opción no válida.")
+        except KeyboardInterrupt:
+            # cuando el usuario presiona Ctrl+C
+            print("\n  Programa interrumpido por usuario.")
+            break
 
 
 if __name__ == "__main__":
